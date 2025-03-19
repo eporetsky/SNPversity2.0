@@ -412,6 +412,11 @@
       max-width: 40px; /* Ensures the width doesn't exceed this value */
   }
 
+  .td_maf {
+      width: 50px;
+      max-width: 50px; /* Ensures the width doesn't exceed this value */
+  }
+
   .td5 {
       width: 160px;
       max-width: 160px; /* Ensures the width doesn't exceed this value */
@@ -1304,7 +1309,7 @@ pre {
         .dataset-table .radio-cell {
             text-align: center;
         }
-        
+
         /* Highlight selected row with a fixed color */
         .dataset-table tr.selected {
             background-color: #d1e7dd; /* Choose your desired fixed color */
