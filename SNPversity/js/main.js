@@ -336,14 +336,6 @@ $(document).ready(function() {
                 console.log("The input value is not a valid number.");
                 rowsPerPage = 100;
             }
-            //console.log(startValue);
-            //console.log(endValue);
-            //console.log(chromosome);
-            //console.log(genotypesJson);
-            //console.log(dataS);
-            //console.log(filename_global);
-            //$('#outputContainer').html('<img src="./gif/loading.gif" alt="Loading...">');
-            //$('#loadingContainer').html('<br><br><center><img width="100px" src="./gif/loading.gif" alt="Loading..."><br>Loading table from VCF file</center>');
 
             filename_global = createUniqueFilename(startValue, endValue);
 
@@ -361,7 +353,7 @@ $(document).ready(function() {
                 dataType: 'json', // Expecting JSON response
                 success: function(response) {
                     // 'response' is already a JavaScript object
-                    console.log(response.message);
+                    //console.log(response.message);
 
                     if (response.status === "success") {
                         console.log("VCF created - Success");
@@ -450,6 +442,26 @@ function downloadFile(outFile) {
 
     // Remove the anchor from the document
     document.body.removeChild(downloadLink);
+}
+
+function getGradientColor(score) {
+    // Map score from -15 (red) to 10 (green)
+    const min = -15;
+    const max = 10;
+    // Ensure score is within the range
+    score = Math.min(Math.max(score, min), max);
+    const ratio = (score - min) / (max - min);  // ratio from 0 to 1
+
+    // Interpolate: at ratio=0 => red=255, green=0; at ratio=1 => red=0, green=255
+    const red = Math.round(255 * (1 - ratio));
+    const green = Math.round(255 * ratio);
+    if (score <= 1 && score >= -1)
+    {
+        return `rgb(211, 211, 211)`;
+    } else {
+        return `rgb(${red}, ${green}, 0)`;
+    }
+
 }
 
 function openPopupM() {
@@ -684,6 +696,22 @@ function parseVCF(outFile, curChr) {
                   th7.innerHTML = "max R2";
                   th7.className = 'th3'; // Assign the class
                   headerRow.appendChild(th7);
+
+                  const th8 = document.createElement('th');
+                  th8.innerHTML = "MAF";
+                  th8.className = 'th3'; // Assign the class
+                  headerRow.appendChild(th8);
+
+                  const th9 = document.createElement('th');
+                  th9.innerHTML = "DNA score";
+                  th9.className = 'th3'; // Assign the class
+                  headerRow.appendChild(th9);
+
+                  const th10 = document.createElement('th');
+                  th10.innerHTML = "AA score";
+                  th10.className = 'th3'; // Assign the class
+                  headerRow.appendChild(th10);
+
               } else if(headerIndex > 8) {
                   const th = document.createElement('th');
                     //th.innerHTML = header.replace(/_/g, '<span class="vertical-text"> </span>').replace(/#/g, '');
@@ -939,6 +967,22 @@ function parseVCF(outFile, curChr) {
                     R2_val = "NA";
                 }
 
+                let MAF = cell.match(/MAF=([^;]+)/)[1];
+                if (MAF== ".") {
+                    MAF = "N/A"
+                }
+
+                let DNA = cell.match(/DNA_SCORE=([^;]+)/)[1];
+                if (DNA == ".") {
+                    DNA = "N/A"
+                }
+
+                let AASCORE = cell.match(/AA_SCORE=([^;]+)/)[1];
+                if (AASCORE == ".") {
+                    AASCORE = "N/A"
+                }
+
+
                 let SUBMatch = cell.match(/SUB=([^\t]*?)(?:MAXR2=|\t|$)/);
                 let SUB = '';
 
@@ -1057,6 +1101,32 @@ function parseVCF(outFile, curChr) {
                 td7.innerHTML = R2_val;
                 td7.className = 'td3'; // Assign the class
                 row.appendChild(td7);
+
+                const td8 = document.createElement('td');
+                td8.innerHTML = MAF;
+                td8.className = 'td_maf'; // Assign the class
+                row.appendChild(td8);
+
+                // Apply inline CSS based on the MAF score
+
+
+                const td9 = document.createElement('td');
+                td9.innerHTML = DNA;
+                td9.className = 'td3'; // Assign the class
+                const mafValue = parseFloat(DNA);
+
+                // Set background color using the gradient function
+                td9.style.backgroundColor = getGradientColor(DNA);
+                td9.style.color = 'white';  // Adjust text color for readability
+
+                row.appendChild(td9);
+
+                const td10 = document.createElement('td');
+                td10.innerHTML = AASCORE;
+                td10.className = 'td3'; // Assign the class
+                td10.style.backgroundColor = getGradientColor(AASCORE);
+                td10.style.color = 'white';  // Adjust text color for readability
+                row.appendChild(td10);
             }
 
             if(cellIndex == 8)
