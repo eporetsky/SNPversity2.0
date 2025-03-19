@@ -56,6 +56,13 @@ with h5py.File(hdf5_file_path, 'r') as hdf5_file:
     variant_data = {var: hdf5_file[var][lower_index:upper_index] for var in var_list}
     genome_data = {genome: hdf5_file[genome][lower_index:upper_index] for genome in genome_list if genome in hdf5_file}
 
+    #print(genome_data)
+
+    # List all keys in the HDF5 file
+    #all_keys = list(hdf5_file.keys())
+    #print("All keys in the HDF5 file:")
+    #for key in all_keys:
+    #    print(key)
 
 # Writing to VCF file
 
@@ -78,6 +85,9 @@ else:
             vcf_file.write("##INFO=<ID=GENEMODEL,Number=.,Type=String,Description=\"The name of the gene model affected by the variant\">\n")
             vcf_file.write("##INFO=<ID=SUB,Number=.,Type=String,Description=\"The amino acid substitution for missense and non-synonymous variants\">\n")
             vcf_file.write("##INFO=<ID=MAXR2,Number=1,Type=Float,Description=\"The maximum R2 for a given loci\">\n")
+            vcf_file.write("##INFO=<ID=DNA_SCORE,Number=1,Type=Float,Description=\"DNA-based language model (PlantCaduceus) log-ratio (likelihood of deleterious SNP)\">\n")
+            vcf_file.write("##INFO=<ID=AA_SCORE,Number=1,Type=Float,Description=\"Protein-based language model (ESM1b) score (likelihood of deleterious AA change)\">\n")
+            vcf_file.write("##INFO=<ID=MAF,Number=1,Type=Float,Description=\"Minor Allele Frequency (MAF) is the proportion of the less common allele at a genetic locus within a given population.\">\n")
             vcf_file.write("##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n")
             vcf_file.write("#" + "\t".join(["CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"] + genome_list) + "\n")
         if "nam" in hdf5_file_path:
@@ -96,6 +106,9 @@ else:
             vcf_file.write("##INFO=<ID=GENEMODEL,Number=.,Type=String,Description=\"The name of the gene model affected by the variant\">\n")
             vcf_file.write("##INFO=<ID=SUB,Number=.,Type=String,Description=\"The amino acid substitution for missense and non-synonymous variants\">\n")
             vcf_file.write("##INFO=<ID=MAXR2,Number=1,Type=Float,Description=\"The maximum R2 for a given loci\">\n")
+            vcf_file.write("##INFO=<ID=DNA_SCORE,Number=1,Type=Float,Description=\"DNA-based language model (PlantCaduceus) log-ratio (likelihood of deleterious SNP)\">\n")
+            vcf_file.write("##INFO=<ID=AA_SCORE,Number=1,Type=Float,Description=\"Protein-based language model (ESM1b) score (likelihood of deleterious AA change)\">\n")
+            vcf_file.write("##INFO=<ID=MAF,Number=1,Type=Float,Description=\"Minor Allele Frequency (MAF) is the proportion of the less common allele at a genetic locus within a given population.\">\n")
             vcf_file.write("##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n")
             vcf_file.write("#" + "\t".join(["CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"] + genome_list) + "\n")
         if "schnable" in hdf5_file_path:
@@ -114,10 +127,11 @@ else:
             vcf_file.write("##INFO=<ID=GENEMODEL,Number=.,Type=String,Description=\"The name of the gene model affected by the variant\">\n")
             vcf_file.write("##INFO=<ID=SUB,Number=.,Type=String,Description=\"The amino acid substitution for missense and non-synonymous variants\">\n")
             vcf_file.write("##INFO=<ID=MAXR2,Number=1,Type=Float,Description=\"The maximum R2 for a given loci\">\n")
+            vcf_file.write("##INFO=<ID=DNA_SCORE,Number=1,Type=Float,Description=\"DNA-based language model (PlantCaduceus) log-ratio (likelihood of deleterious SNP)\">\n")
+            vcf_file.write("##INFO=<ID=AA_SCORE,Number=1,Type=Float,Description=\"Protein-based language model (ESM1b) score (likelihood of deleterious AA change)\">\n")
+            vcf_file.write("##INFO=<ID=MAF,Number=1,Type=Float,Description=\"Minor Allele Frequency (MAF) is the proportion of the less common allele at a genetic locus within a given population.\">\n")
             vcf_file.write("##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n")
             vcf_file.write("#" + "\t".join(["CHROM", "POS", "ID", "REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"] + genome_list) + "\n")
-
-
 
 
         for i in range(len(variant_data['POS'])):

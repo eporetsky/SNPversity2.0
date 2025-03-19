@@ -11,6 +11,8 @@ $filename = $_POST['outName'];
 
 $PYTHON_PATH = getenv('PYTHON_PATH');
 
+$VERSION_PATH = "./hdf5/version3/";
+
 // Validate input
 if (!is_numeric($start) || !is_numeric($end)) {
     echo json_encode(array("status" => "error", "message" => "Invalid input"));
@@ -41,7 +43,7 @@ if ($dataset == "mgdb2024_hq") {
 }
 
 //$db_filename = "./hdf5/maizegdb2024_" . $ds_part1 . "_" . $ds_part2 . ".h5";
-$db_filename = "./hdf5/" . $ds_part0 . "_" . $ds_part1 . "_" . $ds_part2 . ".h5";
+$db_filename = $VERSION_PATH . $ds_part0 . "_" . $ds_part1 . "_" . $ds_part2 . ".h5";
 //$db_filename = "./hdf5/" . $ds_part1 . "_" . $ds_part2 . ".h5";
 
 //$db = escapeshellarg("./hdf5/chr10_HQ_small.h5");
@@ -64,10 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $output = shell_exec($command);
 
     if ($output === null) {
-        echo json_encode(array("status" => "error", "message" => "Python script execution failed "));
-        //echo json_encode(array("status" => "success", "message" => "$command" ));
+        //echo json_encode(array("status" => "error", "message" => "Python script execution failed "));
+        echo json_encode(array("status" => "success", "message" => "$command" ));
     } else {
-        echo json_encode(array("status" => "success", "message" => "Python script executed", "output" => $output));
+        echo json_encode(array("status" => "success", "message" => "$command", "output" => $output));
+        //echo json_encode(array("status" => "success", "message" => "Python script executed", "output" => $output));
     }
 }
 ?>
